@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      routes:
+      - id: income-operations-api
+        uri: ${XPLORA_API_GOOGLE:http://localhost:9081}
+        predicates:
+          - Path=/apiGoogle/v1/**
+        filters:
+          - StripPrefix=2
+      - id: budget-api
+        uri: ${XPLORA_API_WORD_CHECK:http://localhost:9082}
+        predicates:
+          - Path=/apiWordCheck/v1/**
+        filters:
+          - StripPrefix=2
